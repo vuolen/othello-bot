@@ -31,6 +31,7 @@ Since the worst case tree of possible moves is a constant, the worst case space 
 ## Information for the course administration
 
 Degree: Bachelor's in Computer Science
+
 Documentation language: English
 
 ## Sources
