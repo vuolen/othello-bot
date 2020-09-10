@@ -5,13 +5,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.github.vuolen</groupId>
-  <artifactId>othello-core</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <artifactId>othello-bot</artifactId>
+  <version>0</version>
   <packaging>jar</packaging>
 
-  <name>othello-core</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <name>othello-bot</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
