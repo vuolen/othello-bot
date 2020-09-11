@@ -22,12 +22,12 @@ public class Bot implements OthelloBot {
             for (int x = 0; x < 8; x++) {
                 for (int y = 0; y < 8; y++) {
                     if (isMoveValid(board, x, y, color)) {
-                       int[][] newBoard = newBoardFromMove(board, x, y, color);
-                       float newBoardScore = minimax(newBoard, depth - 1, !isMyTurn);
-                       
-                       if (newBoardScore > bestScore) {
-                           bestScore = newBoardScore;
-                       }
+                        int[][] newBoard = newBoardFromMove(board, x, y, color);
+                        float newBoardScore = minimax(newBoard, depth - 1, !isMyTurn);
+
+                        if (newBoardScore > bestScore) {
+                            bestScore = newBoardScore;
+                        }
                     }
                 }
             }
@@ -69,8 +69,7 @@ public class Bot implements OthelloBot {
                 }
             }
         }
-        
-        return ((botScore + opponentScore) / botScore) * 2 - 1;
+        return (botScore / (botScore + opponentScore)) * 2 - 1;
     }
     
     /**
@@ -87,7 +86,7 @@ public class Bot implements OthelloBot {
                 if (isMoveValid(board, x, y, color)) {
                     int[][] newBoard = newBoardFromMove(board, x, y, color);
                     float newBoardScore = minimax(newBoard, 10, true);
-                       
+
                     if (newBoardScore > bestScore) {
                          bestScore = newBoardScore;
                          bestMove[0] = x;

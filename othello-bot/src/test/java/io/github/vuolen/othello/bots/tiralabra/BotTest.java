@@ -5,10 +5,57 @@
  */
 package io.github.vuolen.othello.bots.tiralabra;
 
+import static io.github.vuolen.othello.api.Tile.WHITE;
+import static io.github.vuolen.othello.bots.tiralabra.TestUtil.stringToBoard;
+import java.util.Arrays;
+import static org.junit.Assert.assertArrayEquals;
+import org.junit.Before;
+import org.junit.Test;
+
 /**
  *
  * @author Lennu Vuolanne <vuolanne.lennu@gmail.com>
  */
 public class BotTest {
     
+    Bot bot;
+    
+    @Before
+    public void setup() {
+        this.bot = new Bot();
+    }
+    
+    @Test
+    public void botChoosesWinningMove1() {
+        int[][] board = stringToBoard(
+                "ebweeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee"
+        );
+        
+        bot.startGame(WHITE);
+        assertArrayEquals(new int[]{0, 0}, bot.makeMove(board));
+    }
+    
+    @Test
+    public void botChoosesWinningMove2() {
+        int[][] board = stringToBoard(
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeweeee" +
+                "eeebbwee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee"
+        );
+        
+        bot.startGame(WHITE);
+        assertArrayEquals(new int[]{2, 3}, bot.makeMove(board));
+    }
 }

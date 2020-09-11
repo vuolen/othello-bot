@@ -62,13 +62,15 @@ public class GameLogic {
         for (int[] direction : directions) {
             if (isMoveValidInDirection(newBoard, x, y, color, direction)) {
                 int nextx = x + direction[0], nexty = y + direction[1];
-                while (board[nextx][nexty] == opponent) {
-                    board[nextx][nexty] = color;
+                while (newBoard[nextx][nexty] == opponent) {
+                    newBoard[nextx][nexty] = color;
                     nextx += direction[0];
                     nexty += direction[1];
                 }
             }
         }
+        
+        newBoard[x][y] = color;
         
         return newBoard;
     }

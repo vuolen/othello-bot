@@ -8,6 +8,7 @@ package io.github.vuolen.othello.bots.tiralabra;
 import static io.github.vuolen.othello.api.Tile.*;
 import static io.github.vuolen.othello.bots.tiralabra.GameLogic.isGameOver;
 import static io.github.vuolen.othello.bots.tiralabra.GameLogic.isMoveValid;
+import static io.github.vuolen.othello.bots.tiralabra.GameLogic.newBoardFromMove;
 import static io.github.vuolen.othello.bots.tiralabra.TestUtil.stringToBoard;
 import java.util.Arrays;
 import static org.junit.Assert.assertFalse;
@@ -98,5 +99,22 @@ public class GameLogicTest {
                 "eeeeeeee"
         );
         assertTrue(isGameOver(board));
+    }
+    
+    @Test
+    public void newBoardFromMoveWBW() {
+        int[][] board = stringToBoard(
+                "ebweeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee"
+        );
+        
+        board = newBoardFromMove(board, 0, 0, WHITE);
+        assertTrue(board[1][0] == WHITE);
     }
 }
