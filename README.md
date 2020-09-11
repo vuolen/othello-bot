@@ -19,3 +19,4 @@ Navigate to `othello-bot/` on your terminal, run `mvn test && mvn org.pitest:pit
 ## Weekly reports
 
 [Week 1](doc/reports/week1.md)
+[Week 2](doc/reports/week2.md)
