@@ -36,6 +36,18 @@ public class GameLogic {
         return false;
     }
     
+    public static boolean isGameOver(int[][] board) {
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                if (isMoveValid(board, x, y, BLACK)
+                        || isMoveValid(board, x, y, WHITE)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
     private static boolean isMoveValidInDirection(int[][] board, int x, int y, int color, int[] direction) {
         int opponent = color == BLACK ? WHITE : BLACK;
         int nextx = x + direction[0], nexty = y + direction[1];
@@ -46,7 +58,7 @@ public class GameLogic {
                 || board[nextx][nexty] != opponent) {
             return false;
         }
-        
+
         while (isMoveInBounds(nextx, nexty) && board[nextx][nexty] == opponent) {
             nextx += direction[0];
             nexty += direction[1];

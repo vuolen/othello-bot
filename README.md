@@ -14,7 +14,7 @@ To play against my bot, use your terminal to navigate to `othello-bot/`, then ru
 
 ### How to generate test coverage report
 
-Navigate to `othello-bot/` on your terminal, run `mvn test jacoco:report` and open `target/site/jacoco/index.html` on your browser.
+Navigate to `othello-bot/` on your terminal, run `mvn test && mvn org.pitest:pitest-maven:mutationCoverage` and open `target/pit-reports/index.html` on your browser.
 
 ## Weekly reports
 

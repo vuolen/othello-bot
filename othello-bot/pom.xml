@@ -51,6 +51,7 @@
                     <targetTests>
                         <param>io.github.vuolen.othello.bots.tiralabra.*</param>
                     </targetTests>
+                    <timestampedReports>false</timestampedReports>
                 </configuration>
              </plugin>
         </plugins>

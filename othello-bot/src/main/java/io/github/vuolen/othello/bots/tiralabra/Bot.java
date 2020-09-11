@@ -2,6 +2,7 @@ package io.github.vuolen.othello.bots.tiralabra;
 
 import io.github.vuolen.othello.api.OthelloBot;
 import static io.github.vuolen.othello.api.Tile.EMPTY;
+import static io.github.vuolen.othello.bots.tiralabra.GameLogic.isGameOver;
 
 /**
  *
@@ -11,7 +12,11 @@ public class Bot implements OthelloBot {
     
     private int color;
     
-    private void minimax(int[][] board, boolean isMyTurn) {
+    private float minimax(int[][] board, int depth, boolean isMyTurn) {
+        if (isGameOver(board) || depth == 0) {
+            return evaluateBoard(board);
+        }
+        return 0;
     }
     
     /**
