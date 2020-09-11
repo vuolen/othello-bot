@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package io.github.vuolen.bots;
+package io.github.vuolen.othello.bots.tiralabra;
 
 /**
  *
  * @author Lennu Vuolanne <vuolanne.lennu@gmail.com>
  */
-public class TiraLabraTest {
+public class BotTest {
     
 }
