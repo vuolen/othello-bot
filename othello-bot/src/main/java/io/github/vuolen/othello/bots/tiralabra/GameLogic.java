@@ -22,6 +22,14 @@ public class GameLogic {
         {1, -1}, {-1, -1} // northeast, northwest
     };
     
+    /**
+     * 
+     * @param board
+     * @param x
+     * @param y
+     * @param color
+     * @return true if the given move is valid, false otherwise.
+     */
     public static boolean isMoveValid(int[][] board, int x, int y, int color) {
         
         if (!isMoveInBounds(x, y)) {
@@ -37,6 +45,11 @@ public class GameLogic {
         return false;
     }
     
+    /**
+     * 
+     * @param board
+     * @return true if game is over, false otherwise
+     */
     public static boolean isGameOver(int[][] board) {
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
@@ -49,6 +62,14 @@ public class GameLogic {
         return true;
     }
     
+    /**
+     * Takes in a board and a move to make, returns the new board.
+     * @param board
+     * @param x
+     * @param y
+     * @param color
+     * @return New board with the move applied.
+     */
     public static int[][] newBoardFromMove(int[][] board, int x, int y, int color) {
         int[][] newBoard = new int[8][8];
         
@@ -98,6 +119,12 @@ public class GameLogic {
         return false;
     }
     
+    /**
+     * 
+     * @param x
+     * @param y
+     * @return true if coordinates are in the board
+     */
     public static boolean isMoveInBounds(int x, int y) {
         return x >= 0 && x < 8 && y >= 0 && y < 8;
     }
