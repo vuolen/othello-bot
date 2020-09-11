@@ -1,8 +1,8 @@
 package io.github.vuolen.othello.bots.tiralabra;
 
 import io.github.vuolen.othello.api.OthelloBot;
-import static io.github.vuolen.othello.api.Tile.EMPTY;
-import static io.github.vuolen.othello.bots.tiralabra.GameLogic.isGameOver;
+import static io.github.vuolen.othello.api.Tile.*;
+import static io.github.vuolen.othello.bots.tiralabra.GameLogic.*;
 
 /**
  *
@@ -11,12 +11,43 @@ import static io.github.vuolen.othello.bots.tiralabra.GameLogic.isGameOver;
 public class Bot implements OthelloBot {
     
     private int color;
+    private int opponent;
     
     private float minimax(int[][] board, int depth, boolean isMyTurn) {
         if (isGameOver(board) || depth == 0) {
             return evaluateBoard(board);
         }
-        return 0;
+        if (isMyTurn) {
+            float bestScore = -1f;
+            for (int x = 0; x < 8; x++) {
+                for (int y = 0; y < 8; y++) {
+                    if (isMoveValid(board, x, y, color)) {
+                       int[][] newBoard = newBoardFromMove(board, x, y, color);
+                       float newBoardScore = minimax(newBoard, depth - 1, !isMyTurn);
+                       
+                       if (newBoardScore > bestScore) {
+                           bestScore = newBoardScore;
+                       }
+                    }
+                }
+            }
+            return bestScore;
+        } else {
+            float worstScore = 1f;
+            for (int x = 0; x < 8; x++) {
+                for (int y = 0; y < 8; y++) {
+                    if (isMoveValid(board, x, y, opponent)) {
+                       int[][] newBoard = newBoardFromMove(board, x, y, opponent);
+                       float newBoardScore = minimax(newBoard, depth - 1, !isMyTurn);
+                       
+                       if (newBoardScore < worstScore) {
+                           worstScore = newBoardScore;
+                       }
+                    }
+                }
+            }
+            return worstScore;
+        }
     }
     
     /**
@@ -49,12 +80,29 @@ public class Bot implements OthelloBot {
      */
     @Override
     public int[] makeMove(int[][] board) {
-        return new int[]{0, 0};
+        int[] bestMove = new int[2];
+        float bestScore = -1f;
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                if (isMoveValid(board, x, y, color)) {
+                    int[][] newBoard = newBoardFromMove(board, x, y, color);
+                    float newBoardScore = minimax(newBoard, 10, true);
+                       
+                    if (newBoardScore > bestScore) {
+                         bestScore = newBoardScore;
+                         bestMove[0] = x;
+                         bestMove[1] = y;
+                    }
+                }
+            }
+        }
+        return bestMove;
     }
     
     @Override
     public void startGame(int color) {
         this.color = color;
+        this.opponent = this.color == BLACK ? WHITE : BLACK;
     }
 
     @Override
