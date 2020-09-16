@@ -11,6 +11,15 @@ import static io.github.vuolen.othello.api.Tile.BLACK;
 import static io.github.vuolen.othello.api.Tile.WHITE;
 import io.github.vuolen.othello.domain.Board;
 import static io.github.vuolen.othello.domain.Board.SIZE;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,44 +27,117 @@ import static io.github.vuolen.othello.domain.Board.SIZE;
  */
 public class UI {
 
-    public static void battle(OthelloBot bot1, OthelloBot bot2) {
+    public static void tournament(OthelloBot bot1, OthelloBot bot2, int numberOfGames) {
+        System.out.println("Executing tournament of " + numberOfGames + " games...");
+
+        int winsBot1 = 0;
+        int winsBot2 = 0;
+
+        int i = 0;
+        while (i < numberOfGames) {
+            int winner = battle(bot1, bot2, false);
+            if (winner == BLACK) {
+                winsBot1++;
+            } else if (winner == WHITE) {
+                winsBot2++;
+            }
+            i++;
+        }
+
+        System.out.println("Tournament over, results:");
+        System.out.println("Player 1: " + winsBot1 + " wins");
+        System.out.println("Player 2: " + winsBot2 + " wins");
+    }
+
+    public static int battle(OthelloBot bot1, OthelloBot bot2, boolean printsOn) {
         Board board = new Board();
-        int turn = 1;
+        int turn = 0;
+        int winner = 0;
+
         OthelloBot[] contestants = new OthelloBot[]{bot1, bot2};
         int[] colors = new int[]{BLACK, WHITE};
         bot1.startGame(colors[0]);
         bot2.startGame(colors[1]);
 
-        /*
-        UI BUGFIX:
-        line w hasValidMovesLeft called with param 0 for black, 1 for white,
-        ui turns changed to 1/2 like in board to avoid similar bugs
-        UI CHANGE TODO:
-        - Humans mistype moves. Added isHuma() to bot interface for later timeout
-        implementation & disqualification only for bot if move invalid!
-        - Disqualified player should lose the game
-        */
-        System.out.println("GAME STARTED");
+        print("GAME STARTED", printsOn);
         while (!board.isGameOver()) {
-            System.out.println("-------------------------------");
-            System.out.println(boardToString(board));
-            System.out.println("turn: " + colorToMark(colors[turn-1]));
-            if (board.hasValidMovesLeft(turn)) {
-                int[] move = contestants[turn-1].makeMove(board.getAsArray());
-                if (!board.addMove(move[0], move[1], colors[turn-1])) {
-                    System.out.println("INVALID MOVE - DISQUALIFIED");
+            print("-------------------------------", printsOn);
+            print(boardToString(board), printsOn);
+            print("turn: " + colorToMark(colors[turn]), printsOn);
+
+            int opponent = turn == 0 ? 1 : 0;
+
+            if (board.hasValidMovesLeft(colors[turn])) {
+                int[] move;
+                if (contestants[turn].isHuman()) {
+                    move = contestants[turn].makeMove(board.getAsArray());
+                } else {
+                    move = makeMoveWithTimeout(contestants[turn], board.getAsArray());
+                }
+                
+                if (move == null) {
+                    print("TIMEOUT - DISQUALIFIED", printsOn);
+                    winner = opponent;
                     break;
                 }
+
+                boolean moveValid = board.addMove(move[0], move[1], colors[turn]);
+                if (!moveValid && !contestants[turn].isHuman()) {
+                    print("INVALID MOVE - DISQUALIFIED", printsOn);
+                    winner = opponent;
+                    break;
+                } else if (!moveValid && contestants[turn].isHuman()) {
+                    print("Invalid move, please try again", printsOn);
+                    continue;
+                }
             } else {
-                System.out.println("No possible moves");
+                print("No possible moves", printsOn);
             }
 
-            int opponent = turn == 1 ? 2 : 1;
             turn = opponent;
         }
-        System.out.println("GAME OVER");
-        System.out.println("WINNER: " + colorToMark(board.winner()));
+        
+        print("-------------------------------", printsOn);
+        print(boardToString(board), printsOn);
 
+        print("GAME OVER", printsOn);
+        int winnerColor = board.winner();
+        if (winnerColor == EMPTY) {
+            System.out.println("THE GAME IS A TIE");
+        } else {
+            
+        }
+        print("WINNER: " + colorToMark(winnerColor), printsOn);
+        
+        return winner;
+    }
+    
+    public static int[] makeMoveWithTimeout(final OthelloBot bot, final int[][] board) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        
+        final Future<int[]> handler = executor.submit(new Callable() {
+            @Override
+            public int[] call() throws Exception {
+                return bot.makeMove(board);
+            }
+        });
+        
+        
+        try {
+            handler.get(1000, TimeUnit.MILLISECONDS);
+        } catch (TimeoutException | InterruptedException | ExecutionException e) {
+            handler.cancel(true);
+            e.printStackTrace(System.out);
+            return null;
+        }
+        
+        return bot.makeMove(board);
+    }
+
+    public static void print(String stringToPrint, boolean printsEnabled) {
+        if (printsEnabled) {
+            System.out.println(stringToPrint);
+        }
     }
 
     /* String representation of board, white unicode U+25CF
