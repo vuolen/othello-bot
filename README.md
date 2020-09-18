@@ -12,9 +12,13 @@ This project is built upon a [project template](https://github.com/vuolen/othell
 
 To play against my bot, use your terminal to navigate to `othello-bot/`, then run `mvn package` and `java -jar target/othello-bot-0.jar tiralabra.Bot`
 
-### How to generate test coverage report
+### How to generate a test coverage report
 
 Navigate to `othello-bot/` on your terminal, run `mvn test && mvn org.pitest:pitest-maven:mutationCoverage` and open `target/pit-reports/index.html` on your browser.
+
+### How to generate a checkstyle report
+
+Navigate to `othello-bot/` on your terminal, run `mvn jxr:jxr checkstyle:checkstyle` and open `target/site/checkstyle.html` on your browser.
 
 ## Weekly reports
 

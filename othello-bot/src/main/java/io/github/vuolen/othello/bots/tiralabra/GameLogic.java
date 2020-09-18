@@ -15,7 +15,7 @@ import static io.github.vuolen.othello.api.Tile.WHITE;
  */
 public class GameLogic {
 
-    private static final int[][] directions = new int[][]{
+    private static final int[][] DIRECTIONS = new int[][]{
         {1, 0}, {-1, 0}, // east and west
         {0, 1}, {0, -1}, // south and north
         {1, 1}, {-1, 1}, // southeast, southwest
@@ -36,7 +36,7 @@ public class GameLogic {
             return false;
         }
 
-        for (int[] direction : directions) {
+        for (int[] direction : DIRECTIONS) {
             if (isMoveValidInDirection(board, x, y, color, direction)) {
                 return true;
             }
@@ -81,7 +81,7 @@ public class GameLogic {
         }
 
         int opponent = color == BLACK ? WHITE : BLACK;
-        for (int[] direction : directions) {
+        for (int[] direction : DIRECTIONS) {
             if (isMoveValidInDirection(newBoard, x, y, color, direction)) {
                 int nextx = x + direction[0], nexty = y + direction[1];
                 while (newBoard[nextx][nexty] == opponent) {
