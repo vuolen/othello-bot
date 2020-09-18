@@ -23,4 +23,7 @@ Navigate to `othello-bot/` on your terminal, run `mvn jxr:jxr checkstyle:checkst
 ## Weekly reports
 
 [Week 1](doc/reports/week1.md)
+
 [Week 2](doc/reports/week2.md)
+
+[Week 3](doc/reports/week3.md)
