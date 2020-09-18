@@ -117,4 +117,5 @@ public class GameLogicTest {
         board = newBoardFromMove(board, 0, 0, WHITE);
         assertTrue(board[1][0] == WHITE);
     }
+
 }

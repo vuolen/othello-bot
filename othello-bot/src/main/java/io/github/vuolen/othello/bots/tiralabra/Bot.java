@@ -3,6 +3,7 @@ package io.github.vuolen.othello.bots.tiralabra;
 import io.github.vuolen.othello.api.OthelloBot;
 import static io.github.vuolen.othello.api.Tile.*;
 import static io.github.vuolen.othello.bots.tiralabra.GameLogic.*;
+import java.util.Arrays;
 
 /**
  *
@@ -13,35 +14,44 @@ public class Bot implements OthelloBot {
     private int color;
     private int opponent;
     
-    private float minimax(int[][] board, int depth, boolean isMyTurn) {
+    private float minimax(int[][] board, int depth, float min, float max, boolean isMyTurn) {
+        System.out.println("MINIMAX " + depth + " " + isMyTurn + " " + isGameOver(board));
         if (isGameOver(board) || depth == 0) {
             return evaluateBoard(board);
         }
         if (isMyTurn) {
-            float bestScore = -1f;
+            float bestScore = min;
             for (int x = 0; x < 8; x++) {
                 for (int y = 0; y < 8; y++) {
                     if (isMoveValid(board, x, y, color)) {
                         int[][] newBoard = newBoardFromMove(board, x, y, color);
-                        float newBoardScore = minimax(newBoard, depth - 1, !isMyTurn);
+                        float newBoardScore = minimax(newBoard, depth - 1, bestScore, max, !isMyTurn);
 
                         if (newBoardScore > bestScore) {
                             bestScore = newBoardScore;
+                        }
+                        
+                        if (bestScore > max) {
+                            return max;
                         }
                     }
                 }
             }
             return bestScore;
         } else {
-            float worstScore = 1f;
+            float worstScore = max;
             for (int x = 0; x < 8; x++) {
                 for (int y = 0; y < 8; y++) {
                     if (isMoveValid(board, x, y, opponent)) {
                        int[][] newBoard = newBoardFromMove(board, x, y, opponent);
-                       float newBoardScore = minimax(newBoard, depth - 1, !isMyTurn);
+                       float newBoardScore = minimax(newBoard, depth - 1, min, worstScore, !isMyTurn);
                        
                        if (newBoardScore < worstScore) {
                            worstScore = newBoardScore;
+                       }
+                       
+                       if (worstScore < min) {
+                           return min;
                        }
                     }
                 }
@@ -58,18 +68,24 @@ public class Bot implements OthelloBot {
      * closer to -1 is an advantage to the opponent.
      */
     private float evaluateBoard(int[][] board) {
+                
         // This is just a simple evaluator right now, definitely not optimal.
         float botScore = 0, opponentScore = 0;
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 if (board[x][y] == this.color) {
                     botScore++;
-                } else if (board[x][y] != EMPTY) {
+                } else if (board[x][y] == this.opponent) {
                     opponentScore++;
                 }
             }
         }
-        return (botScore / (botScore + opponentScore)) * 2 - 1;
+                
+        if (botScore > opponentScore) {
+            return (botScore - opponentScore) / (botScore + opponentScore);
+        } else {
+            return -(opponentScore - botScore) / (botScore + opponentScore);
+        }
     }
     
     /**
@@ -85,9 +101,9 @@ public class Bot implements OthelloBot {
             for (int y = 0; y < 8; y++) {
                 if (isMoveValid(board, x, y, color)) {
                     int[][] newBoard = newBoardFromMove(board, x, y, color);
-                    float newBoardScore = minimax(newBoard, 10, true);
-
-                    if (newBoardScore > bestScore) {
+                    float newBoardScore = minimax(newBoard, 2, -1f, 1f, false);
+                                        
+                    if (newBoardScore >= bestScore) {
                          bestScore = newBoardScore;
                          bestMove[0] = x;
                          bestMove[1] = y;

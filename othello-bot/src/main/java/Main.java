@@ -34,7 +34,7 @@ public class Main {
             } else {
                 UI.battle(bot1, bot2, true);
             }
-
+            
         } else {
             System.out.println("Invalid arguments; USAGE: java -jar pathto.jar BotClass1 [BotClass2] [NumberOfGames]");
         }

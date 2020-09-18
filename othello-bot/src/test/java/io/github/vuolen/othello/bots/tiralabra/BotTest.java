@@ -5,10 +5,13 @@
  */
 package io.github.vuolen.othello.bots.tiralabra;
 
+import static io.github.vuolen.othello.api.Tile.BLACK;
 import static io.github.vuolen.othello.api.Tile.WHITE;
+import static io.github.vuolen.othello.bots.tiralabra.GameLogic.newBoardFromMove;
 import static io.github.vuolen.othello.bots.tiralabra.TestUtil.stringToBoard;
 import java.util.Arrays;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,7 +50,7 @@ public class BotTest {
         int[][] board = stringToBoard(
                 "eeeeeeee" +
                 "eeeeeeee" +
-                "eeeweeee" +
+                "eeeeeeee" +
                 "eeebbwee" +
                 "eeeeeeee" +
                 "eeeeeeee" +
@@ -57,5 +60,22 @@ public class BotTest {
         
         bot.startGame(WHITE);
         assertArrayEquals(new int[]{2, 3}, bot.makeMove(board));
+    }
+    
+    @Test
+    public void botDoesntChooseLosingMove() {
+        int[][] board = stringToBoard(
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eewbweee" +
+                "eeeweeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee"
+        );
+        
+        bot.startGame(BLACK);
+        assertArrayEquals(new int[]{3, 4}, bot.makeMove(board));
     }
 }
