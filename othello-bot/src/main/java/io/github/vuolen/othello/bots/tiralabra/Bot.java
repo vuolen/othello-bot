@@ -15,7 +15,6 @@ public class Bot implements OthelloBot {
     private int opponent;
     
     private float minimax(int[][] board, int depth, float min, float max, boolean isMyTurn) {
-        System.out.println("MINIMAX " + depth + " " + isMyTurn + " " + isGameOver(board));
         if (isGameOver(board) || depth == 0) {
             return evaluateBoard(board);
         }
@@ -101,7 +100,7 @@ public class Bot implements OthelloBot {
             for (int y = 0; y < 8; y++) {
                 if (isMoveValid(board, x, y, color)) {
                     int[][] newBoard = newBoardFromMove(board, x, y, color);
-                    float newBoardScore = minimax(newBoard, 2, -1f, 1f, false);
+                    float newBoardScore = minimax(newBoard, 5, -1f, 1f, false);
                                         
                     if (newBoardScore >= bestScore) {
                          bestScore = newBoardScore;

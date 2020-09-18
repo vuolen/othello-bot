@@ -58,8 +58,20 @@ public class BotTest {
                 "eeeeeeee"
         );
         
+        int[][] board2 = stringToBoard(
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeew" +
+                "eeeeeeeb" +
+                "eeeeeeeb" +
+                "eeeeeeee"
+        );
+        
         bot.startGame(WHITE);
         assertArrayEquals(new int[]{2, 3}, bot.makeMove(board));
+        assertArrayEquals(new int[]{7, 7}, bot.makeMove(board2));
     }
     
     @Test
