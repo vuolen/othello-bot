@@ -1,27 +1,48 @@
 package io.github.vuolen.othello.bots.tiralabra;
 
 import io.github.vuolen.othello.api.OthelloBot;
-import static io.github.vuolen.othello.api.Tile.*;
-import static io.github.vuolen.othello.bots.tiralabra.GameLogic.*;
-import java.util.Arrays;
+import static io.github.vuolen.othello.api.Tile.BLACK;
+import static io.github.vuolen.othello.api.Tile.WHITE;
+import static io.github.vuolen.othello.bots.tiralabra.GameLogic.isGameOver;
+import static io.github.vuolen.othello.bots.tiralabra.GameLogic.isMoveValid;
+import static io.github.vuolen.othello.bots.tiralabra.GameLogic.newBoardFromMove;
 
 /**
  *
  * @author Lennu Vuolanne <vuolanne.lennu@gmail.com>
  */
 public class Bot implements OthelloBot {
-    
+
+    private static final int BOARD_SIZE = 8;
+
+    /**
+     * The color of the bot's disks. BLACK or WHITE
+     */
     private int color;
+    /**
+     * The color of the opponent's disks. BLACK or WHITE
+     */
     private int opponent;
-    
+
+    /**
+     * The minimax algorithm. Evaluates a board by looking at following possible
+     * board states. Returns a float in the range -1...1
+     *
+     * @param board
+     * @param depth
+     * @param min
+     * @param max
+     * @param isMyTurn
+     * @return score of the board state
+     */
     private float minimax(int[][] board, int depth, float min, float max, boolean isMyTurn) {
         if (isGameOver(board) || depth == 0) {
             return evaluateBoard(board);
         }
         if (isMyTurn) {
             float bestScore = min;
-            for (int x = 0; x < 8; x++) {
-                for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
+                for (int y = 0; y < BOARD_SIZE; y++) {
                     if (isMoveValid(board, x, y, color)) {
                         int[][] newBoard = newBoardFromMove(board, x, y, color);
                         float newBoardScore = minimax(newBoard, depth - 1, bestScore, max, !isMyTurn);
@@ -29,7 +50,7 @@ public class Bot implements OthelloBot {
                         if (newBoardScore > bestScore) {
                             bestScore = newBoardScore;
                         }
-                        
+
                         if (bestScore > max) {
                             return max;
                         }
@@ -39,39 +60,40 @@ public class Bot implements OthelloBot {
             return bestScore;
         } else {
             float worstScore = max;
-            for (int x = 0; x < 8; x++) {
-                for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
+                for (int y = 0; y < BOARD_SIZE; y++) {
                     if (isMoveValid(board, x, y, opponent)) {
-                       int[][] newBoard = newBoardFromMove(board, x, y, opponent);
-                       float newBoardScore = minimax(newBoard, depth - 1, min, worstScore, !isMyTurn);
-                       
-                       if (newBoardScore < worstScore) {
-                           worstScore = newBoardScore;
-                       }
-                       
-                       if (worstScore < min) {
-                           return min;
-                       }
+                        int[][] newBoard = newBoardFromMove(board, x, y, opponent);
+                        float newBoardScore = minimax(newBoard, depth - 1, min, worstScore, !isMyTurn);
+
+                        if (newBoardScore < worstScore) {
+                            worstScore = newBoardScore;
+                        }
+
+                        if (worstScore < min) {
+                            return min;
+                        }
                     }
                 }
             }
             return worstScore;
         }
     }
-    
+
     /**
-     * Takes in a board state and returns a float in the range -1...1, indicating which player
-     * is in a better position to win.
+     * Takes in a board state and returns a float in the range -1...1,
+     * indicating which player is in a better position to win.
+     *
      * @param board
-     * @return a float in the range of -1...1, closer to 1 is an advantage to this bot,
-     * closer to -1 is an advantage to the opponent.
+     * @return a float in the range of -1...1, closer to 1 is an advantage to
+     * this bot, closer to -1 is an advantage to the opponent.
      */
     private float evaluateBoard(int[][] board) {
-                
+
         // This is just a simple evaluator right now, definitely not optimal.
         float botScore = 0, opponentScore = 0;
-        for (int x = 0; x < 8; x++) {
-            for (int y = 0; y < 8; y++) {
+        for (int x = 0; x < BOARD_SIZE; x++) {
+            for (int y = 0; y < BOARD_SIZE; y++) {
                 if (board[x][y] == this.color) {
                     botScore++;
                 } else if (board[x][y] == this.opponent) {
@@ -79,16 +101,18 @@ public class Bot implements OthelloBot {
                 }
             }
         }
-                
+
         if (botScore > opponentScore) {
             return (botScore - opponentScore) / (botScore + opponentScore);
         } else {
             return -(opponentScore - botScore) / (botScore + opponentScore);
         }
     }
-    
+
     /**
-     * Takes in the current state of the board and returns the coordinates for the next move.
+     * Takes in the current state of the board and returns the coordinates for
+     * the next move.
+     *
      * @param board
      * @return two-element array containing the x and y coordinates
      */
@@ -96,23 +120,23 @@ public class Bot implements OthelloBot {
     public int[] makeMove(int[][] board) {
         int[] bestMove = new int[2];
         float bestScore = -1f;
-        for (int x = 0; x < 8; x++) {
-            for (int y = 0; y < 8; y++) {
+        for (int x = 0; x < BOARD_SIZE; x++) {
+            for (int y = 0; y < BOARD_SIZE; y++) {
                 if (isMoveValid(board, x, y, color)) {
                     int[][] newBoard = newBoardFromMove(board, x, y, color);
                     float newBoardScore = minimax(newBoard, 5, -1f, 1f, false);
-                                        
+
                     if (newBoardScore >= bestScore) {
-                         bestScore = newBoardScore;
-                         bestMove[0] = x;
-                         bestMove[1] = y;
+                        bestScore = newBoardScore;
+                        bestMove[0] = x;
+                        bestMove[1] = y;
                     }
                 }
             }
         }
         return bestMove;
     }
-    
+
     @Override
     public void startGame(int color) {
         this.color = color;
@@ -123,5 +147,5 @@ public class Bot implements OthelloBot {
     public boolean isHuman() {
         return false;
     }
-    
+
 }
