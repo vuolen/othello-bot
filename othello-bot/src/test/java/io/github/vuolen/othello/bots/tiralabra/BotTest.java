@@ -75,6 +75,23 @@ public class BotTest {
     }
     
     @Test
+    public void botChoosesWinningMove3() {
+        int[][] board = stringToBoard(
+                "eeeeeeee" +
+                "beebeeee" +
+                "beeweeee" +
+                "weeeeeee" +
+                "weeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee"
+        );
+        
+        bot.startGame(WHITE);
+        assertArrayEquals(new int[]{0, 0}, bot.makeMove(board));
+    }
+    
+    @Test
     public void botChoosesCorrectMoveWithCustomEvaluator() {
         int[][] board = stringToBoard(
                 "eebeeebe" +
