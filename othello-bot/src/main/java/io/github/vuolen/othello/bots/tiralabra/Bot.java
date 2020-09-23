@@ -13,7 +13,7 @@ import static io.github.vuolen.othello.bots.tiralabra.GameLogic.newBoardFromMove
  */
 public class Bot implements OthelloBot {
 
-    private static final int BOARD_SIZE = 8;
+    public static final int BOARD_SIZE = 8;
 
     /**
      * The color of the bot's disks. BLACK or WHITE
@@ -23,7 +23,17 @@ public class Bot implements OthelloBot {
      * The color of the opponent's disks. BLACK or WHITE
      */
     private int opponent;
-
+    
+    private IEvaluator evaluator;
+    
+    public Bot() {
+        this(Evaluators::greedy);
+    }
+    
+    public Bot(IEvaluator evaluator) {
+        this.evaluator = evaluator;
+    }
+    
     /**
      * The minimax algorithm. Evaluates a board by looking at following possible
      * board states. Returns a float in the range -1...1
@@ -37,16 +47,17 @@ public class Bot implements OthelloBot {
      */
     private float minimax(int[][] board, int depth, float min, float max, boolean isMyTurn) {
         if (isGameOver(board) || depth == 0) {
-            return evaluateBoard(board);
+            return this.evaluator.evaluateBoard(board, color);
         }
         if (isMyTurn) {
             float bestScore = min;
+            boolean hasValidMoves = false;
             for (int x = 0; x < BOARD_SIZE; x++) {
                 for (int y = 0; y < BOARD_SIZE; y++) {
                     if (isMoveValid(board, x, y, color)) {
                         int[][] newBoard = newBoardFromMove(board, x, y, color);
                         float newBoardScore = minimax(newBoard, depth - 1, bestScore, max, !isMyTurn);
-
+                        
                         if (newBoardScore > bestScore) {
                             bestScore = newBoardScore;
                         }
@@ -57,15 +68,20 @@ public class Bot implements OthelloBot {
                     }
                 }
             }
+            if (!hasValidMoves) {
+                return minimax(board, depth - 1, min, max, !isMyTurn);
+            }
             return bestScore;
         } else {
             float worstScore = max;
+            boolean hasValidMoves = false;
             for (int x = 0; x < BOARD_SIZE; x++) {
                 for (int y = 0; y < BOARD_SIZE; y++) {
                     if (isMoveValid(board, x, y, opponent)) {
+                        hasValidMoves = true;
                         int[][] newBoard = newBoardFromMove(board, x, y, opponent);
                         float newBoardScore = minimax(newBoard, depth - 1, min, worstScore, !isMyTurn);
-
+                        
                         if (newBoardScore < worstScore) {
                             worstScore = newBoardScore;
                         }
@@ -76,36 +92,10 @@ public class Bot implements OthelloBot {
                     }
                 }
             }
-            return worstScore;
-        }
-    }
-
-    /**
-     * Takes in a board state and returns a float in the range -1...1,
-     * indicating which player is in a better position to win.
-     *
-     * @param board
-     * @return a float in the range of -1...1, closer to 1 is an advantage to
-     * this bot, closer to -1 is an advantage to the opponent.
-     */
-    private float evaluateBoard(int[][] board) {
-
-        // This is just a simple evaluator right now, definitely not optimal.
-        float botScore = 0, opponentScore = 0;
-        for (int x = 0; x < BOARD_SIZE; x++) {
-            for (int y = 0; y < BOARD_SIZE; y++) {
-                if (board[x][y] == this.color) {
-                    botScore++;
-                } else if (board[x][y] == this.opponent) {
-                    opponentScore++;
-                }
+            if (!hasValidMoves) {
+                return minimax(board, depth - 1, min, max, !isMyTurn);
             }
-        }
-
-        if (botScore > opponentScore) {
-            return (botScore - opponentScore) / (botScore + opponentScore);
-        } else {
-            return -(opponentScore - botScore) / (botScore + opponentScore);
+            return worstScore;
         }
     }
 
@@ -125,7 +115,6 @@ public class Bot implements OthelloBot {
                 if (isMoveValid(board, x, y, color)) {
                     int[][] newBoard = newBoardFromMove(board, x, y, color);
                     float newBoardScore = minimax(newBoard, 5, -1f, 1f, false);
-
                     if (newBoardScore >= bestScore) {
                         bestScore = newBoardScore;
                         bestMove[0] = x;
