@@ -19,7 +19,91 @@ public class Evaluators {
     /**
      * The evaluator used in the final release
      */
-    public static float tiralabra(int[][] board, int color) {
+    public static float tiralabra(int[][] board, int color) {        
+        int opponent = color == WHITE ? BLACK : WHITE;
+        float totalMoves = 0, totalDisks = 0, totalFrontierDisks = 0;
+        float mobilityScore = 0, diskAmountScore = 0, frontierDiskAmountScore = 0;
+        float cornerScore = 0;
+        float xtileScore = 0;
+        
+        int[][] CORNERS = new int[][] {
+            {0, 0}, {0, 7}, {7, 0}, {7, 7}
+        };
+        
+        for (int[] corner : CORNERS) {
+            int cornerColor = board[corner[0]][corner[1]];
+            if (cornerColor == color) {
+                cornerScore += 0.25;
+            } else if (cornerColor == opponent) {
+                cornerScore -= 0.25;
+            }
+        }
+        
+        int[][] XTILES = new int[][] {
+            {1, 1}, {1, 6}, {6, 1}, {6, 6}
+        };
+        
+        for (int[] xtile : XTILES) {
+            int xtileColor = board[xtile[0]][xtile[1]];
+            if (xtileColor == color) {
+                xtileScore -= 0.25;
+            } else if (xtileColor == opponent) {
+                xtileScore += 0.25;
+            }
+        }
+        
+        for (int x = 0; x < BOARD_SIZE; x++) {
+            for (int y = 0; y < BOARD_SIZE; y++) {
+                if (board[x][y] == color) {
+                    diskAmountScore++;
+                    totalDisks++;
+                    
+                    if (GameLogic.isFrontierDisk(board, x, y)) {
+                        frontierDiskAmountScore--;
+                        totalFrontierDisks++;
+                    }
+                    
+                } else if (board[x][y] == opponent) {
+                    diskAmountScore--;
+                    totalDisks++;
+                    
+                    if (GameLogic.isFrontierDisk(board, x, y)) {
+                        frontierDiskAmountScore++;
+                        totalFrontierDisks++;
+                    }
+                }
+                if (GameLogic.isMoveValid(board, x, y, color)) {
+                    mobilityScore++;
+                    totalMoves++;
+                }
+                if (GameLogic.isMoveValid(board, x, y, opponent)) {
+                    mobilityScore--;
+                    totalMoves++;
+                }
+            }
+        }
+        
+        if (totalMoves == 0) {
+            if (diskAmountScore > 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+        
+        float MOBILITYWEIGHT = 1f, CORNERWEIGHT = 2f, XTILEWEIGHT = 2f, FRONTIERWEIGHT = 2f;
+        float TOTALWEIGHT = (MOBILITYWEIGHT + CORNERWEIGHT + XTILEWEIGHT + FRONTIERWEIGHT);
+        
+        return (MOBILITYWEIGHT * (mobilityScore / totalMoves) 
+                + CORNERWEIGHT * cornerScore 
+                + XTILEWEIGHT * xtileScore
+                + FRONTIERWEIGHT * (frontierDiskAmountScore / totalFrontierDisks)) / TOTALWEIGHT;
+    }
+    
+     /**
+     * Used to compare to older versions of the main evaluator
+     */
+    public static float tiralabra_comparison(int[][] board, int color) {
         int opponent = color == WHITE ? BLACK : WHITE;
         float totalMoves = 0, totalDisks = 0;
         float mobilityScore = 0, diskAmountScore = 0;
@@ -46,9 +130,9 @@ public class Evaluators {
         for (int[] xtile : XTILES) {
             int xtileColor = board[xtile[0]][xtile[1]];
             if (xtileColor == color) {
-                xtileScore += 0.25;
-            } else if (xtileColor == opponent) {
                 xtileScore -= 0.25;
+            } else if (xtileColor == opponent) {
+                xtileScore += 0.25;
             }
         }
         
@@ -80,7 +164,10 @@ public class Evaluators {
             }
         }
         
-        return ((mobilityScore / totalMoves) + cornerScore) / 2;
+        float MOBILITYWEIGHT = 1f, CORNERWEIGHT = 2f, XTILEWEIGHT = 1f;
+        float TOTALWEIGHT = (MOBILITYWEIGHT + CORNERWEIGHT + XTILEWEIGHT);
+        
+        return (MOBILITYWEIGHT * (mobilityScore / totalMoves) + CORNERWEIGHT * cornerScore + XTILEWEIGHT * xtileScore) / TOTALWEIGHT;
     }
     
     

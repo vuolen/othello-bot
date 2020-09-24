@@ -119,6 +119,17 @@ public class GameLogic {
 
         return false;
     }
+    
+    public static boolean isFrontierDisk(int[][] board, int x, int y) {
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                if (isMoveInBounds(x + dx, y + dy) && board[x + dx][y + dy] == EMPTY) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     /**
      *

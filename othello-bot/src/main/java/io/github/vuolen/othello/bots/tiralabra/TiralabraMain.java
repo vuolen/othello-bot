@@ -19,6 +19,13 @@ public class TiralabraMain {
     public static void main(String[] args) {
         Bot tiralabra = new Bot(Evaluators::tiralabra);
         
+        if (UI.battle(tiralabra, new Bot(Evaluators::tiralabra_comparison), false) != BLACK
+                || UI.battle(new Bot(Evaluators::tiralabra_comparison), tiralabra, false) != WHITE) {
+            System.out.println("TIRALABRA LOST COMPARISON");
+        } else {
+            System.out.println("TIRALABRA WINS COMPARISON");
+        }
+        
         if (UI.battle(tiralabra, new Bot(Evaluators::greedy), false) != BLACK
                 || UI.battle(new Bot(Evaluators::greedy), tiralabra, false) != WHITE) {
             System.out.println("TIRALABRA LOST GREEDY");
