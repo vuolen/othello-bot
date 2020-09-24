@@ -16,6 +16,22 @@ import io.github.vuolen.othello.bots.tiralabra.GameLogic;
  */
 public class TiralabraEvaluator implements IEvaluator {
 
+    private float MOBILITYWEIGHT;
+    private float CORNERWEIGHT;
+    private float XTILEWEIGHT;
+    private float FRONTIERWEIGHT;
+
+    public TiralabraEvaluator() {
+        this(0.10307702f, 0.15892823f, 0.14176463f, 0.15102874f);
+    }
+    
+    public TiralabraEvaluator(float MOBILITYWEIGHT, float CORNERWEIGHT, float XTILEWEIGHT, float FRONTIERWEIGHT) {
+        this.MOBILITYWEIGHT = MOBILITYWEIGHT;
+        this.CORNERWEIGHT = CORNERWEIGHT;
+        this.XTILEWEIGHT = XTILEWEIGHT;
+        this.FRONTIERWEIGHT = FRONTIERWEIGHT;
+    }
+    
     @Override
     public float evaluateBoard(int[][] board, int color) {        
         int opponent = color == WHITE ? BLACK : WHITE;
@@ -89,7 +105,6 @@ public class TiralabraEvaluator implements IEvaluator {
             }
         }
         
-        float MOBILITYWEIGHT = 1f, CORNERWEIGHT = 2f, XTILEWEIGHT = 2f, FRONTIERWEIGHT = 2f;
         float TOTALWEIGHT = (MOBILITYWEIGHT + CORNERWEIGHT + XTILEWEIGHT + FRONTIERWEIGHT);
         
         return (MOBILITYWEIGHT * (mobilityScore / totalMoves) 
@@ -97,5 +112,12 @@ public class TiralabraEvaluator implements IEvaluator {
                 + XTILEWEIGHT * xtileScore
                 + FRONTIERWEIGHT * (frontierDiskAmountScore / totalFrontierDisks)) / TOTALWEIGHT;
     }
+
+    @Override
+    public String toString() {
+        return MOBILITYWEIGHT + "f, " + CORNERWEIGHT + "f, " + XTILEWEIGHT + "f, " + FRONTIERWEIGHT + "f";
+    }
+    
+    
     
 }

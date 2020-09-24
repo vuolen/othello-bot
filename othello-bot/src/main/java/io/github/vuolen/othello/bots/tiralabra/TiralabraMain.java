@@ -19,49 +19,38 @@ import io.github.vuolen.othello.ui.UI;
 public class TiralabraMain {
 
     public static void main(String[] args) {
-        Bot tiralabra = new Bot(new TiralabraEvaluator());
-        
-        if (UI.battle(tiralabra, new Bot(Evaluators::tiralabra_comparison), false) != BLACK
-                || UI.battle(new Bot(Evaluators::tiralabra_comparison), tiralabra, false) != WHITE) {
-            System.out.println("TIRALABRA LOST COMPARISON");
-        } else {
-            System.out.println("TIRALABRA WINS COMPARISON");
+        TiralabraEvaluator[] evaluators = new TiralabraEvaluator[10];
+        int[] scores = new int[10];
+        for (int i = 0; i < evaluators.length; i++) {
+            evaluators[i] = new TiralabraEvaluator((float) Math.random(), (float) Math.random(), 
+                                                    (float) Math.random(), (float) Math.random());
         }
         
-        tiralabra = new Bot(new TiralabraEvaluator());
+        evaluators[0] = new TiralabraEvaluator(0.10307702f, 0.15892823f, 0.14176463f, 0.15102874f);
         
-        if (UI.battle(tiralabra, new Bot(Evaluators::greedy), false) != BLACK
-                || UI.battle(new Bot(Evaluators::greedy), tiralabra, false) != WHITE) {
-            System.out.println("TIRALABRA LOST GREEDY");
-        } else {
-            System.out.println("TIRALABRA WINS GREEDY");
-        }
-        
-        tiralabra = new Bot(new TiralabraEvaluator());
+        for (int i = 0; i < evaluators.length; i++) {
+            for (int j = 0; j < evaluators.length; j++) {
+                System.out.println(i + " " + j);
+                int winner = UI.battle(new Bot(evaluators[j]), new Bot(evaluators[i]), false);
+                if (winner == BLACK) {
+                    scores[j]++;
+                } else if (winner == WHITE) {
+                    scores[i]++;
+                }
 
-        if (UI.battle(tiralabra, new Bot(Evaluators::average), false) != BLACK
-                || UI.battle(new Bot(Evaluators::average), tiralabra, false) != WHITE) {
-            System.out.println("TIRALABRA LOST AVERAGE");
-        } else {
-            System.out.println("TIRALABRA WINS AVERAGE");
+                winner = UI.battle(new Bot(evaluators[i]), new Bot(evaluators[j]), false);
+                if (winner == BLACK) {
+                    scores[i]++;
+                } else if (winner == WHITE) {
+                    scores[j]++;
+                }
+            }
         }
         
-        tiralabra = new Bot(new TiralabraEvaluator());
-        
-        if (UI.battle(tiralabra, new Bot(Evaluators::random), false) != BLACK
-                || UI.battle(new Bot(Evaluators::random), tiralabra, false) != WHITE) {
-            System.out.println("TIRALABRA LOST RANDOM");
-        } else {
-            System.out.println("TIRALABRA WINS RANDOM");
-        }
-        
-        tiralabra = new Bot(new TiralabraEvaluator());
-
-        if (UI.battle(tiralabra, new SimpleBot(), false) != BLACK
-                || UI.battle(new SimpleBot(), tiralabra, false) != WHITE) {
-            System.out.println("TIRALABRA LOST SIMPLEBOT");
-        } else {
-            System.out.println("TIRALABRA WINS SIMPLEBOT");
+        for (int i = 0; i < evaluators.length; i++) {
+            System.out.println(evaluators[i]);
+            System.out.println("\t" + scores[i]);
+            System.out.println("-------------");
         }
     }
 }
