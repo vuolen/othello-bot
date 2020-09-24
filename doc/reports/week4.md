@@ -1,4 +1,4 @@
-# Week 3
+# Week 4
 
 This week the core of the bot is pretty much finished. The only thing subject to change is the static evaluator, which can always be improved. Left to do now is optimization, documentation and increasing test coverage.
 
