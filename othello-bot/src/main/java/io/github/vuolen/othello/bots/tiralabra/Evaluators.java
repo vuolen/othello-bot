@@ -16,6 +16,72 @@ import static io.github.vuolen.othello.bots.tiralabra.Bot.BOARD_SIZE;
  */
 public class Evaluators {
     
+    /**
+     * The evaluator used in the final release
+     */
+    public static float tiralabra(int[][] board, int color) {
+        int opponent = color == WHITE ? BLACK : WHITE;
+        float totalMoves = 0, totalDisks = 0;
+        float mobilityScore = 0, diskAmountScore = 0;
+        float cornerScore = 0;
+        float xtileScore = 0;
+        
+        int[][] CORNERS = new int[][] {
+            {0, 0}, {0, 7}, {7, 0}, {7, 7}
+        };
+        
+        for (int[] corner : CORNERS) {
+            int cornerColor = board[corner[0]][corner[1]];
+            if (cornerColor == color) {
+                cornerScore += 0.25;
+            } else if (cornerColor == opponent) {
+                cornerScore -= 0.25;
+            }
+        }
+        
+        int[][] XTILES = new int[][] {
+            {1, 1}, {1, 6}, {6, 1}, {6, 6}
+        };
+        
+        for (int[] xtile : XTILES) {
+            int xtileColor = board[xtile[0]][xtile[1]];
+            if (xtileColor == color) {
+                xtileScore += 0.25;
+            } else if (xtileColor == opponent) {
+                xtileScore -= 0.25;
+            }
+        }
+        
+        for (int x = 0; x < BOARD_SIZE; x++) {
+            for (int y = 0; y < BOARD_SIZE; y++) {
+                if (board[x][y] == color) {
+                    diskAmountScore++;
+                    totalDisks++;
+                } else if (board[x][y] == opponent) {
+                    diskAmountScore--;
+                    totalDisks++;
+                }
+                if (GameLogic.isMoveValid(board, x, y, color)) {
+                    mobilityScore++;
+                    totalMoves++;
+                }
+                if (GameLogic.isMoveValid(board, x, y, opponent)) {
+                    mobilityScore--;
+                    totalMoves++;
+                }
+            }
+        }
+        
+        if (totalMoves == 0) {
+            if (diskAmountScore > 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+        
+        return ((mobilityScore / totalMoves) + cornerScore) / 2;
+    }
     
     
     /**

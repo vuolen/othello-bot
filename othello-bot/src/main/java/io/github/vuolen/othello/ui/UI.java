@@ -52,7 +52,7 @@ public class UI {
     public static int battle(OthelloBot bot1, OthelloBot bot2, boolean printsOn) {
         Board board = new Board();
         int turn = 0;
-        int winner = 0;
+        int winner = EMPTY;
 
         OthelloBot[] contestants = new OthelloBot[]{bot1, bot2};
         int[] colors = new int[]{BLACK, WHITE};
@@ -102,14 +102,17 @@ public class UI {
 
         print("GAME OVER", printsOn);
         int winnerColor = board.winner();
+        if (winner != EMPTY) {
+            winnerColor = colors[winner];
+        }
+        
         if (winnerColor == EMPTY) {
             System.out.println("THE GAME IS A TIE");
-        } else {
-            
         }
+        
         print("WINNER: " + colorToMark(winnerColor), printsOn);
         
-        return colors[winner];
+        return winnerColor;
     }
     
     public static int[] makeMoveWithTimeout(final OthelloBot bot, final int[][] board) {

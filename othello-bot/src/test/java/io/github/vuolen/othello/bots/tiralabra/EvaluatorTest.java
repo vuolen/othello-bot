@@ -18,7 +18,7 @@ import org.junit.Test;
 public class EvaluatorTest {
     
     private static final IEvaluator[] EVALUATORS = new IEvaluator[]{
-        Evaluators::greedy, Evaluators::average, Evaluators::random
+        Evaluators::greedy, Evaluators::tiralabra, Evaluators::average, Evaluators::random
     };
     
     @Test

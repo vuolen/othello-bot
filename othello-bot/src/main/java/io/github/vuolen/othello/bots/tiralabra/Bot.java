@@ -30,7 +30,7 @@ public class Bot implements OthelloBot {
     private IEvaluator evaluator;
     
     public Bot() {
-        this(Evaluators::average);
+        this(Evaluators::tiralabra);
     }
     
     public Bot(IEvaluator evaluator) {
