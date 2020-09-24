@@ -5,11 +5,10 @@
  */
 package io.github.vuolen.othello.bots.tiralabra;
 
+import io.github.vuolen.othello.bots.tiralabra.evaluators.Evaluators;
 import static io.github.vuolen.othello.api.Tile.BLACK;
 import static io.github.vuolen.othello.api.Tile.WHITE;
-import static io.github.vuolen.othello.bots.tiralabra.GameLogic.newBoardFromMove;
 import static io.github.vuolen.othello.bots.tiralabra.TestUtil.stringToBoard;
-import java.util.Arrays;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;

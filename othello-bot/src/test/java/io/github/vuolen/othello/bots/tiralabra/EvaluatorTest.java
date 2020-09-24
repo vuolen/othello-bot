@@ -5,9 +5,12 @@
  */
 package io.github.vuolen.othello.bots.tiralabra;
 
+import io.github.vuolen.othello.bots.tiralabra.evaluators.Evaluators;
 import static io.github.vuolen.othello.api.Tile.BLACK;
 import static io.github.vuolen.othello.api.Tile.WHITE;
 import static io.github.vuolen.othello.bots.tiralabra.TestUtil.stringToBoard;
+import io.github.vuolen.othello.bots.tiralabra.evaluators.IEvaluator;
+import io.github.vuolen.othello.bots.tiralabra.evaluators.TiralabraEvaluator;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -18,7 +21,12 @@ import org.junit.Test;
 public class EvaluatorTest {
     
     private static final IEvaluator[] EVALUATORS = new IEvaluator[]{
-        Evaluators::greedy, Evaluators::tiralabra, Evaluators::average, Evaluators::random
+        Evaluators::greedy,
+        (board, color) -> {
+            return (new TiralabraEvaluator()).evaluateBoard(board, color);
+        },
+        Evaluators::average,
+        Evaluators::random
     };
     
     @Test

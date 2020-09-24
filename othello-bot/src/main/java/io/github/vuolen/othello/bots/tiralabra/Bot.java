@@ -6,6 +6,8 @@ import static io.github.vuolen.othello.api.Tile.WHITE;
 import static io.github.vuolen.othello.bots.tiralabra.GameLogic.isGameOver;
 import static io.github.vuolen.othello.bots.tiralabra.GameLogic.isMoveValid;
 import static io.github.vuolen.othello.bots.tiralabra.GameLogic.newBoardFromMove;
+import io.github.vuolen.othello.bots.tiralabra.evaluators.IEvaluator;
+import io.github.vuolen.othello.bots.tiralabra.evaluators.TiralabraEvaluator;
 
 /**
  *
@@ -30,7 +32,7 @@ public class Bot implements OthelloBot {
     private IEvaluator evaluator;
     
     public Bot() {
-        this(Evaluators::tiralabra);
+        this(new TiralabraEvaluator());
     }
     
     public Bot(IEvaluator evaluator) {

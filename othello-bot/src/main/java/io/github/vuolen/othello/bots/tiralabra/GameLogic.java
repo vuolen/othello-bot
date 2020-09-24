@@ -120,6 +120,13 @@ public class GameLogic {
         return false;
     }
     
+    /**
+     * Returns true, if the given disk has adjacent empty tiles.
+     * @param board
+     * @param x
+     * @param y
+     * @return 
+     */
     public static boolean isFrontierDisk(int[][] board, int x, int y) {
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
