@@ -47,6 +47,7 @@
                 <configuration>
                     <targetClasses>
                         <param>io.github.vuolen.othello.bots.tiralabra.*</param>
+                        <param>io.github.vuolen.othello.bots.tiralabra.evaluators.*</param>
                     </targetClasses>
                     <targetTests>
                         <param>io.github.vuolen.othello.bots.tiralabra.*</param>
