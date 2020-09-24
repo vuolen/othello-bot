@@ -24,10 +24,13 @@ public class Bot implements OthelloBot {
      */
     private int opponent;
     
+    /**
+     * The bot's static evaluator
+     */
     private IEvaluator evaluator;
     
     public Bot() {
-        this(Evaluators::greedy);
+        this(Evaluators::average);
     }
     
     public Bot(IEvaluator evaluator) {
@@ -114,7 +117,7 @@ public class Bot implements OthelloBot {
             for (int y = 0; y < BOARD_SIZE; y++) {
                 if (isMoveValid(board, x, y, color)) {
                     int[][] newBoard = newBoardFromMove(board, x, y, color);
-                    float newBoardScore = minimax(newBoard, 5, -1f, 1f, false);
+                    float newBoardScore = minimax(newBoard, 4, -1f, 1f, false);
                     if (newBoardScore >= bestScore) {
                         bestScore = newBoardScore;
                         bestMove[0] = x;

@@ -92,11 +92,72 @@ public class BotTest {
     }
     
     @Test
+    public void botChoosesDoesntChooseWinningMove3WithReverseGreedyEvaluator() {
+        int[][] board = stringToBoard(
+                "eeeeeeee" +
+                "beebeeee" +
+                "beeweeee" +
+                "weeeeeee" +
+                "weeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee"
+        );
+        
+        Bot reverseGreedyBot = new Bot((int[][] b, int color) -> {
+            return -Evaluators.greedy(board, color);
+        });
+        
+        reverseGreedyBot.startGame(WHITE);
+        assertArrayEquals(new int[]{3, 0}, reverseGreedyBot.makeMove(board));
+    }
+    
+    @Test
+    public void botDoesntChooseXTile() {
+        int[][] board = stringToBoard(
+                "ebbbbbbe" +
+                "eeeebwew" +
+                "eeeeewbw" +
+                "eeeebeww" +
+                "eeeeeeew" +
+                "eeeeeeew" +
+                "eeeeeeew" +
+                "eeeeeeee"
+        );
+        
+        bot.startGame(WHITE);
+        int[] move = bot.makeMove(board);
+        assertTrue(move[0] != 6 || move[1] != 1);
+    }
+    
+    @Test
+    public void botChoosesXTileWithReverseGreedyEvaluator() {
+        int[][] board = stringToBoard(
+                "ebbbbbbe" +
+                "eeeebwew" +
+                "eeeeewbw" +
+                "eeeebeww" +
+                "eeeeeeew" +
+                "eeeeeeew" +
+                "eeeeeeew" +
+                "eeeeeeee"
+        );
+        
+        Bot reverseGreedyBot = new Bot((int[][] b, int color) -> {
+            return -Evaluators.greedy(board, color);
+        });
+        
+        reverseGreedyBot.startGame(WHITE);
+        int[] move = reverseGreedyBot.makeMove(board);
+        assertTrue(move[0] == 6 && move[1] == 1);
+    }
+    
+    @Test
     public void botChoosesCorrectMoveWithCustomEvaluator() {
         int[][] board = stringToBoard(
                 "eebeeebe" +
                 "eeweeewe" +
-                "eeeeeeee" +
+                "eeeeeewe" +
                 "eeeeeeee" +
                 "eeeeeeee" +
                 "eeeeeeee" +
