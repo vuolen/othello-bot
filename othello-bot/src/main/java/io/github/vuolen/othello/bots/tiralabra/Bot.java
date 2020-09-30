@@ -60,6 +60,7 @@ public class Bot implements OthelloBot {
             for (int x = 0; x < BOARD_SIZE; x++) {
                 for (int y = 0; y < BOARD_SIZE; y++) {
                     if (isMoveValid(board, x, y, color)) {
+                        hasValidMoves = true;
                         int[][] newBoard = newBoardFromMove(board, x, y, color);
                         float newBoardScore = minimax(newBoard, depth - 1, bestScore, max, !isMyTurn);
                         
