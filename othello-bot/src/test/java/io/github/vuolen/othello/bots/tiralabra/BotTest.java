@@ -154,9 +154,9 @@ public class BotTest {
     @Test
     public void botChoosesCorrectMoveWithCustomEvaluator() {
         int[][] board = stringToBoard(
-                "eebeeebe" +
-                "eeweeewe" +
-                "eeeeeewe" +
+                "eeeeeeee" +
+                "ebeeebee" +
+                "eweeewee" +
                 "eeeeeeee" +
                 "eeeeeeee" +
                 "eeeeeeee" +
@@ -165,10 +165,10 @@ public class BotTest {
         );
         
         Bot customBot = new Bot((int[][] b, int color) -> {
-            return b[2][2] == color ? 1 : 0;
+            return b[1][2] == color ? 1 : -1;
         });
         
         customBot.startGame(BLACK);
-        assertArrayEquals(new int[]{2, 2}, customBot.makeMove(board));
+        assertArrayEquals(new int[]{1, 3}, customBot.makeMove(board));
     }
 }
