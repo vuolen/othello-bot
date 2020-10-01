@@ -16,8 +16,4 @@ Navigate to `othello-bot/` on your terminal, run `mvn test && mvn org.pitest:pit
 
 ## Pitest coverage reports
 
-![tiralabra coverage report](tiralabra-coverage.png)
-
-![evaluators coverage report](evaluators-coverage.png)
-
-Coverage percentages being low has much to do with temporary code. `Evaluators.java` will not be a part of the finished project, so it will not get tested too thoroughly. Performance tests or the custom main method are not tested either, in fact these will be ignored in future coverage reports.
+![tiralabra coverage report](cov.png)
