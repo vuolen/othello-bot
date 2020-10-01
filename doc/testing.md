@@ -8,7 +8,7 @@ Game logic is fairly easy to test though, so `GameLogicTests` are more comprehen
 
 ## Performance tests
 
-The project has a couple of performance tests located in `io.github.vuolen.othello.tiralabra.Performance`, these are subject to change and there will be more to come.
+The project has a couple of performance tests which can be run by running `io.github.vuolen.othello.tiralabra.Performance`.
 
 ## Running the tests and creating a test coverage report
 
