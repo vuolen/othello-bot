@@ -88,4 +88,66 @@ public class EvaluatorTest {
             assertEquals(-1, e.evaluateBoard(board1, BLACK), 0.001);
         }
     }
+    
+    @Test
+    public void TiralabraEvaluatorAddsDifferentScoresTogether() {
+        int[][] board = stringToBoard(
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeewbeee" +
+                "eeebweee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee"
+        );
+        
+        float t1 = new TiralabraEvaluator(1, 1, 1, 1).evaluateBoard(board, BLACK);
+        float t2 = new TiralabraEvaluator(1, 0, 0, 0).evaluateBoard(board, BLACK);
+        float t3 = new TiralabraEvaluator(0, 1, 0, 0).evaluateBoard(board, BLACK);
+        float t4 = new TiralabraEvaluator(0, 0, 1, 0).evaluateBoard(board, BLACK);
+        float t5 = new TiralabraEvaluator(0, 0, 0, 1).evaluateBoard(board, BLACK);
+        
+        assertEquals(t1, (t2 + t3 + t4 + t5) / 4 , 0.001);
+    }
+    
+    @Test
+    public void TiralabraEvaluatorReturnsCorrectCornerScore() {
+        int[][] board = stringToBoard(
+                "weeeeeee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "eeewbeee" +
+                "eeebweee" +
+                "eeeeeeee" +
+                "eeeeeeee" +
+                "weeeeeee"
+        );
+        
+        float cornerScoreWhite = new TiralabraEvaluator(0, 1, 0, 0).evaluateBoard(board, WHITE);
+        float cornerScoreBlack = new TiralabraEvaluator(0, 1, 0, 0).evaluateBoard(board, BLACK);
+        
+        assertEquals(cornerScoreWhite, 0.5, 0.001);
+        assertEquals(cornerScoreBlack, -0.5, 0.001);
+    }
+    
+    @Test
+    public void TiralabraEvaluatorReturnsCorrectXtileScore() {
+        int[][] board = stringToBoard(
+                "eeeeeeee" +
+                "ebeeeeee" +
+                "eeeeeeee" +
+                "eeewbeee" +
+                "eeebweee" +
+                "eeeeeeee" +
+                "ebeeeeee" +
+                "eeeeeeee"
+        );
+        
+        float xtileScoreWhite = new TiralabraEvaluator(0, 0, 1, 0).evaluateBoard(board, WHITE);
+        float xtileScoreBlack = new TiralabraEvaluator(0, 0, 1, 0).evaluateBoard(board, BLACK);
+        
+        assertEquals(xtileScoreWhite, 0.5, 0.001);
+        assertEquals(xtileScoreBlack, -0.5, 0.001);
+    }
 }

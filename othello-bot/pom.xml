@@ -49,6 +49,11 @@
                         <param>io.github.vuolen.othello.bots.tiralabra.*</param>
                         <param>io.github.vuolen.othello.bots.tiralabra.evaluators.*</param>
                     </targetClasses>
+                    <excludedClasses>
+                        <param>io.github.vuolen.othello.bots.tiralabra.evaluators.Evaluators</param>
+                        <param>io.github.vuolen.othello.bots.tiralabra.Performance</param>
+                        <param>io.github.vuolen.othello.bots.tiralabra.TiralabraMain</param>
+                    </excludedClasses>
                     <targetTests>
                         <param>io.github.vuolen.othello.bots.tiralabra.*</param>
                     </targetTests>
