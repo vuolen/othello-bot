@@ -18,9 +18,10 @@ import java.util.Random;
  */
 public class Performance {
     public static void main(String[] args) {
-        makeMoveStartingState(1000);
+        makeMoveStartingState(100);
         makeMoveRandomState(100);
         evaluateStartingState(1000000);
+        evaluateRandomState(1000000);
     }
     
     public static void makeMoveStartingState(int n) {
@@ -78,5 +79,20 @@ public class Performance {
         }
         double seconds = ((double) tAcc / n) / 1000000000;
         System.out.println("makeMove on random board state: average " + seconds + " s " + "(n = " + n + ")");
+    }
+    
+    public static void evaluateRandomState(int n) {
+        int[][] board = new Board().getAsArray();
+        TiralabraEvaluator e = new TiralabraEvaluator();
+        
+        long tAcc = 0;
+        for (int i = 0; i < n; i++) {
+            long t = System.nanoTime();
+            e.evaluateBoard(createRandomBoard(), WHITE);
+            tAcc += System.nanoTime() - t;
+        }
+        
+        double seconds = ((double) tAcc / n) / 1000000000;
+        System.out.println("evaluateBoard on random board state: average " + seconds + " seconds " + "(n = " + n + ")");
     }
 }
