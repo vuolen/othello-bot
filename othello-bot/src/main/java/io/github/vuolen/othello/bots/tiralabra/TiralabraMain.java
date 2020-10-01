@@ -19,14 +19,14 @@ import io.github.vuolen.othello.ui.UI;
 public class TiralabraMain {
 
     public static void main(String[] args) {
-        TiralabraEvaluator[] evaluators = new TiralabraEvaluator[10];
+        TiralabraEvaluator[] evaluators = new TiralabraEvaluator[4];
         int[] scores = new int[10];
         for (int i = 0; i < evaluators.length; i++) {
             evaluators[i] = new TiralabraEvaluator((float) Math.random(), (float) Math.random(), 
                                                     (float) Math.random(), (float) Math.random());
         }
         
-        evaluators[0] = new TiralabraEvaluator(0.10307702f, 0.15892823f, 0.14176463f, 0.15102874f);
+        evaluators[0] = new TiralabraEvaluator(1f, 0.5f, 0.5f, 1f);
         
         for (int i = 0; i < evaluators.length; i++) {
             for (int j = 0; j < evaluators.length; j++) {

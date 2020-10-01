@@ -22,7 +22,7 @@ public class TiralabraEvaluator implements IEvaluator {
     private float FRONTIERWEIGHT;
 
     public TiralabraEvaluator() {
-        this(0.10307702f, 0.15892823f, 0.14176463f, 0.15102874f);
+        this(1f, 0.5f, 0.5f, 1f);
     }
     
     public TiralabraEvaluator(float MOBILITYWEIGHT, float CORNERWEIGHT, float XTILEWEIGHT, float FRONTIERWEIGHT) {

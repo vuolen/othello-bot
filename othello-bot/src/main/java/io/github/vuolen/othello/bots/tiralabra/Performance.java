@@ -55,23 +55,25 @@ public class Performance {
         System.out.println("evaluateBoard on starting board state: average " + seconds + " seconds " + "(n = " + n + ")");
     }
     
-    public static void makeMoveRandomState(int n) {
-        Bot bot = new Bot();
+    private static int[][] createRandomBoard() {
         int[][] board = new int[8][8];
         int[] TILES = new int[]{EMPTY, WHITE, BLACK};
-        
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 board[i][j] = TILES[new Random().nextInt(TILES.length)];
             }
         }
-        
+        return board;
+    }
+    
+    public static void makeMoveRandomState(int n) {
+        Bot bot = new Bot();
         bot.startGame(WHITE);
         
         long tAcc = 0;
         for (int i = 0; i < n; i++) {
             long t = System.nanoTime();
-            bot.makeMove(board);
+            bot.makeMove(createRandomBoard());
             tAcc += System.nanoTime() - t;
         }
         double seconds = ((double) tAcc / n) / 1000000000;
