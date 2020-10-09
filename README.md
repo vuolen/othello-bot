@@ -10,11 +10,19 @@ This project is built upon a [project template](https://github.com/vuolen/othell
 
 [Implementation document](doc/implementation.md)
 
-[Testing document](doc/testing.md)
+### Usage
 
-### How to run
+#### How to play
 
 To play against my bot, use your terminal to navigate to `othello-bot/`, then run `mvn package` and `java -jar target/othello-bot-0.jar tiralabra.Bot`
+
+Use the terminal to specify the coordinates of your next move (eg. d3)
+
+You can also run my bot against itself with `java -jar target/othello-bot-0.jar tiralabra.Bot tiralabra.Bot`
+
+### How to test
+
+See the [testing document](doc/testing.md)
 
 ### How to generate a checkstyle report
 
@@ -29,3 +37,7 @@ Navigate to `othello-bot/` on your terminal, run `mvn jxr:jxr checkstyle:checkst
 [Week 3](doc/reports/week3.md)
 
 [Week 4](doc/reports/week4.md)
+
+[Week 5](doc/reports/week5.md)
+
+[Week 6](doc/reports/week5.md)
